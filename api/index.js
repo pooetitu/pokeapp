@@ -11,7 +11,14 @@ server.listen(port, () => {
     console.log('server listenning');
 });
 
-const io = socketIO(server);
-io.onconnection('connection', socket => {
+const io = socketIO(server, {  
+    pingTimeout: 60000,
+});
+
+io.on('connection', socket => {
     console.log('someone is connected');
+    socket.emit('connected', 'test emit')
+    socket.on('disconnect', () => {
+        console.log('someone disconnected');
+    });
 });
