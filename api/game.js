@@ -12,7 +12,7 @@ export const startGame = (players, config) => {
     for (let i=0;i<players.length;i++) {
 
         let you = {name: players[i].name, pokemon: players[i].pokemon}
-        let opponent = {name: players[!i | 0].name, pokemon: players[!i | 0].pokemon}
+        let opponent = {name: players[Number(!i)].name, pokemon: players[Number(!i)].pokemon}
         players[i].socket.emit('started', {
             you: you,
             opponent: opponent,
@@ -23,8 +23,15 @@ export const startGame = (players, config) => {
 
 export const terminateGame = (socket, players) => {
     console.log('Game terminating...');
-
-    // TODO
+    for(let i=0;i<players.length;i++){
+        if(players[i].socket.id === socket.id){
+            players.splice(i,1)
+            console.log('');
+        }else{
+            players[i].pokemon = null;
+            players[i].socket.emit('terminated');
+        }
+    }
 };
 
 export const handleMove = (moveId, players, config) => {
