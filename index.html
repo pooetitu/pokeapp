@@ -1,14 +1,49 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Index</title>
+        <title>PokeApp</title>
     </head>
     <body>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
         <script>
-            const socket = io('http://localhost:3000/?name=quentin');
-            socket.on('connected', data =>{
+            const name = `quentin-${Math.floor(Math.random()*10000)}`;
+            const socket = io(`http://localhost:3000?name=${name}`);
+
+            console.log(name);
+
+            socket.on('connected', () => {
+                console.log('connected');
+            });
+
+            socket.on('connection_refused', () => {
+                console.log('connection_refused :(');
+            });
+
+            socket.on('started', data => {
+                console.log('started');
                 console.log(data);
+
+                if ('you' === data.turn) {
+                    socket.emit('move', 3);
+                }
+            });
+
+            socket.on('terminated', () => {
+                console.log('game terminated');
+            });
+
+            socket.on('ended', data => {
+                console.log('ended');
+                console.log(data);
+            })
+
+            socket.on('moved', data => {
+                console.log('moved');
+                console.log(data);
+
+                if ('you' === data.turn) {
+                    socket.emit('move', 3);
+                }
             })
         </script>
     </body>

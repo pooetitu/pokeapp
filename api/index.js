@@ -22,26 +22,27 @@ const io = socketIO(server, {
 
 
 io.on('connection', socket => {
-    socket.emit('connected', 'test emit');
-    addNewPlayer(socket)
-    socket.on('disconnect', () => {
-        console.log('someone disconnected');
-    });
-});
+    const name = socket.handshake.query.name || 'Someone';
+    console.log(`${name} is connected`);
+    socket.emit('connected');
 
-function addNewPlayer(socket){
-    if(players.length < 2){
-        let name = socket.handshake.query.name;
-        let number = Math.floor(Math.random() * Math.floor(99999));
-        name += '-' + number;
-        console.log(name + ' is connected');
-        players.push({name: name, socket: socket, pokemon: null});
-        if(players.length === 2){
-            startGame(players);
-        }
-    }
-    else{
-        socket.emit('connected', 'Too many players connected');
+    if (players.length < 2) {
+        players.push({ name, socket, pokemon: null });
+    } else {
+        socket.emit('connection_refused');
         socket.disconnect();
     }
-}
+
+    if (2 === players.length) {
+        startGame(players, config);
+    }
+
+    socket.on('disconnect', () => {
+        console.log(`${name} has disconnected`);
+        terminateGame(socket, players);
+    });
+
+    socket.on('move', moveId => {
+        handleMove(moveId, players, config);
+    });
+});
