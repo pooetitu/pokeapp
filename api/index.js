@@ -1,6 +1,7 @@
 import http from 'http';
 import socketIO from 'socket.io'
 import { startGame, terminateGame, handleMove } from './game';
+import pokemons from './pokemons';
 
 
 const players = [];
@@ -23,11 +24,13 @@ const io = socketIO(server, {
 
 io.on('connection', socket => {
     const name = socket.handshake.query.name || 'Someone';
+    const pokemonIndex = socket.handshake.query.pokemon || 0;
     console.log(`${name} is connected`);
     socket.emit('connected');
 
     if (players.length < 2) {
-        players.push({ name, socket, pokemon: null });
+        players.push({ name, socket, pokemon: pokemons[pokemonIndex] });
+        
     } else {
         socket.emit('connection_refused');
         socket.disconnect();

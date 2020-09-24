@@ -4,11 +4,6 @@ export const startGame = (players, config) => {
     console.log('Game starting...');
     config['turn'] = Math.floor(Math.random() * 1);
     console.log('player turn is set to ' + config.turn)
-    for (let player of players){
-        let rndPokemon = Math.floor(Math.random() * pokemons.length);
-        console.log(pokemons[rndPokemon].name + ' Assigned to ' + player['name']);
-        player.pokemon = {...pokemons[rndPokemon]};
-    }
     for(const [index, player] of players.entries()){
         const {socket, ...you} = player; 
         const {socket: _, opponent} = players.find(player => player.socket.id !== socket);
@@ -37,14 +32,19 @@ export const handleMove = (moveId, players, config) => {
     let activePlayer = players[config.turn];
     let opponent = players.find(player => player.socket.id !== activePlayer.socket.id);
     let move = activePlayer.pokemon.moves[moveId];
+
+    let modifier = move.power * 0.5;
+    let rndModifier = Math.round(Math.random() * (modifier - (-modifier)) + (-modifier));
+    let damage = move.power + rndModifier;
+    
     console.log(`${activePlayer.name} with "${activePlayer.pokemon.name}" has played "${move.name}"`);
-    console.log(`${opponent.pokemon.name} (${opponent.pokemon.hp}hp) has taken ${move.power} damages`);
-    if(opponent.pokemon.hp - move.power <= 0){
+    console.log(`${opponent.pokemon.name} (${opponent.pokemon.hp}hp) has taken ${damage} damages`);
+    if(opponent.pokemon.hp - damage <= 0){
         opponent.pokemon.hp = 0;
         endGame(players);
     }
     else{
-        opponent.pokemon.hp -= move.power;
+        opponent.pokemon.hp -= damage;
         updateGame(moveId, players, config);
     }
 };
