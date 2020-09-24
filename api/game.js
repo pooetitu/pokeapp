@@ -1,4 +1,3 @@
-import { emit } from 'nodemon';
 import pokemons from './pokemons';
 
 export const startGame = (players, config) => {
@@ -8,7 +7,7 @@ export const startGame = (players, config) => {
     for (let player of players){
         let rndPokemon = Math.floor(Math.random() * pokemons.length);
         console.log(pokemons[rndPokemon].name + ' Assigned to ' + player['name']);
-        player['pokemon'] = {...pokemons[rndPokemon]};
+        player.pokemon = {...pokemons[rndPokemon]};
     }
     for(const [index, player] of players.entries()){
         const {socket, ...you} = player; 
@@ -36,8 +35,8 @@ export const terminateGame = (socket, players) => {
 
 export const handleMove = (moveId, players, config) => {
     let activePlayer = players[config.turn];
-    let opponent = players.findIndex(player => player.socket.id !== activePlayer.socket.id);
-    let move = activePlayer.pokemon.moves.find(move => moveId === move.originalId);
+    let opponent = players.find(player => player.socket.id !== activePlayer.socket.id);
+    let move = activePlayer.pokemon.moves[moveId];
     console.log(`${activePlayer.name} with "${activePlayer.pokemon.name}" has played "${move.name}"`);
     console.log(`${opponent.pokemon.name} (${opponent.pokemon.hp}hp) has taken ${move.power} damages`);
     if(opponent.pokemon.hp - move.power <= 0){
@@ -58,6 +57,7 @@ const updateGame = (moveId, players, config) => {
         player.socket.emit('moved',{
             you,
             opponent,
+            moveId,
             turn: index === config.turn ? 'you' : 'opponent',
         });
     }
@@ -65,6 +65,14 @@ const updateGame = (moveId, players, config) => {
 
 const endGame = players => {
     console.log('Game ending...');
-
-    // TODO
+    let winnerIndex = players.findIndex(player => player.pokemon.hp > 0);
+    for(const [index, player] of players.entries()){
+        const {socket, ...you} = player; 
+        const {socket: _, opponent} = players.find(player => player.socket.id !== socket);
+        player.socket.emit('ended', {
+            you,
+            opponent,
+            win: index === winnerIndex,
+        })
+    }
 };
