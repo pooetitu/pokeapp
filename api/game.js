@@ -1,3 +1,4 @@
+import { emit } from 'nodemon';
 import pokemons from './pokemons';
 
 export const startGame = (players, config) => {
@@ -34,10 +35,25 @@ export const terminateGame = (socket, players) => {
 };
 
 export const handleMove = (moveId, players, config) => {
-    // console.log(`${activePlayer.name} with "${activePlayer.pokemon.name}" has played "${move.name}"`);
-    // console.log(`${opponent.pokemon.name} (${opponent.pokemon.hp}hp) has taken ${move.power} damages`);
-
-    // TODO
+    let activePlayer = players[config.turn];
+    let opponent = players.findIndex(player => player.socket.id !== activePlayer.socket.id);
+    let move;
+    for(let moveIter of activePlayer.pokemon.moves){
+        if(moveIter.originalId === moveId){
+            move = moveIter;
+            break;
+        }
+    }
+    console.log(`${activePlayer.name} with "${activePlayer.pokemon.name}" has played "${move.name}"`);
+    console.log(`${opponent.pokemon.name} (${opponent.pokemon.hp}hp) has taken ${move.power} damages`);
+    if(opponent.pokemon.hp - move.power <= 0){
+        opponent.pokemon.hp = 0;
+        endGame(players);
+    }
+    else{
+        opponent.pokemon.hp -= move.power;
+        updateGame(moveId, players, config);
+    }
 };
 
 const updateGame = (moveId, players, config) => {
