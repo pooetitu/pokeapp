@@ -1,11 +1,29 @@
 import React from 'react';
 
-export default ({ data, status }) => {
+export default ({ data, status, socket }) => {
     let message = '';
     if( status === 'waiting'){
         message = 'En attente d\'un autre joueur...';
     }else if(status ==='playing') {
         message = 'Le combat commence';
+    }
+
+    const triggerAction = (index) =>{
+        if(data.turn === 'you'){
+            socket.emit('move', index);
+        }
+    }
+    const triggerAction1 =() =>{
+        triggerAction(0);
+    }
+    const triggerAction2 =() =>{
+        triggerAction(1);
+    }
+    const triggerAction3 =() =>{
+        triggerAction(2);
+    }
+    const triggerAction4 =() =>{
+        triggerAction(3);
     }
     return (
         <>
@@ -46,16 +64,16 @@ export default ({ data, status }) => {
                     </div>
                 </div>
                 <div className="c-actions">
-                    <button className="c-actions__action" onClick={() => console.log('TODO')}>
+                    <button className="c-actions__action" onClick={(triggerAction1)  }>
                         Action 1
                     </button>
-                    <button className="c-actions__action" onClick={() => console.log('TODO')}>
+                    <button className="c-actions__action" onClick={(triggerAction2) }>
                         Action 2
                     </button>
-                    <button className="c-actions__action" onClick={() => console.log('TODO')}>
+                    <button className="c-actions__action" onClick={(triggerAction3) }>
                         Action 3
                     </button>
-                    <button className="c-actions__action" onClick={() => console.log('TODO')} disabled>
+                    <button className="c-actions__action" onClick={(triggerAction4) } >
                         Action 4
                     </button>
                 </div>
