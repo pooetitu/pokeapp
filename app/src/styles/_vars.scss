@@ -30,6 +30,12 @@ $sizes: (
     @each $size, $value in $sizes {
         --size-#{$size}: #{$value};
     }
+
+    @media (max-width: 1024px) {
+        --size-base: #{map-get($sizes, "sm")};
+        --size-lg: #{map-get($sizes, "base")};
+        --size-xl: #{map-get($sizes, "lg")};
+    }
 }
 
 /********************
@@ -48,29 +54,29 @@ $sizes: (
 
 @each $size, $value in $sizes {
     .u-font-size-#{$size} {
-        font-size: #{$value};
+        font-size: var(--size-#{$size});
     }
 }
 
 @each $prop, $abbrev in (margin: m, padding: p) {
     @each $size, $value in $sizes {
         .u-#{$abbrev}-#{$size} {
-            #{$prop}: #{$value};
+            #{$prop}: var(--size-#{$size});
         }
 
         .u-#{$abbrev}x-#{$size} {
-            #{$prop}-left: #{$value} !important;
-            #{$prop}-right: #{$value} !important;
+            #{$prop}-left: var(--size-#{$size}) !important;
+            #{$prop}-right: var(--size-#{$size}) !important;
         }
 
         .u-#{$abbrev}y-#{$size} {
-            #{$prop}-top: #{$value} !important;
-            #{$prop}-bottom: #{$value} !important;
+            #{$prop}-top: var(--size-#{$size}) !important;
+            #{$prop}-bottom: var(--size-#{$size}) !important;
         }
 
         @each $posProp, $posAbbrev in (top: t, right: r, bottom: b, left: l) {
             .u-#{$abbrev}#{$posAbbrev}-#{$size} {
-                #{$prop}-#{$posProp}: #{$value} !important;
+                #{$prop}-#{$posProp}: var(--size-#{$size}) !important;
             }
         }
     }

@@ -1,6 +1,12 @@
 import React from 'react';
 
-export default () => {
+export default ({ data, status }) => {
+    let message = '';
+    if( status === 'waiting'){
+        message = 'En attente d\'un autre joueur...';
+    }else if(status ==='playing') {
+        message = 'Le combat commence';
+    }
     return (
         <>
             <div className="c-game">
@@ -11,10 +17,9 @@ export default () => {
                     </div>
                     <div className="c-pokemon">
                         <div className="c-pokemon__image">
-                            <img
-                                alt="Opponent Pokemon"
-                                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/134.png"
-                            />
+                            {data?.opponent?.pokemon && (
+                                <img alt="Opponent Pokemon" src={data.opponent.pokemon.image} />
+                            )}
                         </div>
                     </div>
                 </div>
@@ -35,7 +40,7 @@ export default () => {
             </div>
             <div className="c-game-info">
                 <div className="c-message">
-                    Le combat commence...
+                    {message}
                     <div className="c-form u-mt-base">
                         <button onClick={() => console.log('TODO')}>Retourner au menu</button>
                     </div>
