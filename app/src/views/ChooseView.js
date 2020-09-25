@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export default () => {
+export default ({ setPokemon }) => {
     return (
         <div className="c-page">
             <div className="c-choose">
@@ -9,18 +9,28 @@ export default () => {
                     <div className="u-d-flex">
                         <img
                             alt="Opponent Pokemon"
-                            onClick={() => console.log('TODO')}
-                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/14.png"
+                            onClick={() =>setPokemon(0)}
+                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
                         />
                         <img
                             alt="Opponent Pokemon"
-                            onClick={() => console.log('TODO')}
-                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/34.png"
-                        />
-                        <img
-                            alt="Opponent Pokemon"
-                            onClick={() => console.log('TODO')}
+                            onClick={() => setPokemon(1)}
                             src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+                        />
+                        <img
+                            alt="Opponent Pokemon"
+                            onClick={() => setPokemon(2)}
+                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png"
+                        />
+                        <img
+                            alt="Opponent Pokemon"
+                            onClick={() => setPokemon(3)}
+                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                        />
+                        <img
+                            alt="Opponent Pokemon"
+                            onClick={() => setPokemon(4)}
+                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png"
                         />
                     </div>
                 </div>

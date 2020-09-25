@@ -33,6 +33,7 @@ export const handleMove = (moveId, players, config) => {
     let opponent = players.find(player => player.socket.id !== activePlayer.socket.id);
     let move = activePlayer.pokemon.moves[moveId];
 
+    // Damage randomisation
     let modifier = move.power * 0.5;
     let rndModifier = Math.round(Math.random() * (modifier - (-modifier)) + (-modifier));
     let damage = move.power + rndModifier;

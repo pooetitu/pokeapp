@@ -11,14 +11,15 @@ export default () => {
     const [socket, setSocket] = useState();
     const [data, setData] = useState();
     const [status, setStatus] = useState('waiting'); // waiting, playing, ended, terminated
-
+    
     useEffect(() => {
-        if (!name) {
+        if (!name || !pokemon) {
+            console.log('ret')
             return;
         }
-
-        setSocket(io(`http://localhost:3000?name=${name}`/*&pokemon=${pokemon}`*/));
-    }, [name]);
+        console.log('poke: ' + pokemon)
+        setSocket(io(`http://localhost:3000?name=${name}&pokemon=${pokemon}`));
+    }, [pokemon]);
 
     useEffect(() => {
         if (!socket) {
@@ -42,27 +43,29 @@ export default () => {
 
 
         socket.on('terminated', () => {
+            setStatus('terminated')
             console.log('game terminated');
         });
 
         socket.on('ended', data => {
+            setStatus('ended')
             console.log('ended');
-            console.log(data);
+            setData(data);
         })
 
         socket.on('moved', data => {
             console.log('moved');
-            console.log(data);
+            setData(data);
         })
 
     }, [socket]);
 
     return (
         <div className="c-app">
-            {name && !pokemon && <GameView data={data} status={status} socket={socket}/>}
+            {name && pokemon && <GameView data={data} status={status} socket={socket}/>}
             {!name && <LoginView setName={setName} />}
             {/* <WelcomeView /> */}
-            {/*name && !pokemon && <ChooseView setPokemon={setPokemon}/>*/}
+            {name && !pokemon && <ChooseView setPokemon={setPokemon}/>}
         </div>
     );
 };

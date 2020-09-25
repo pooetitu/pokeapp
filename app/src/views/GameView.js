@@ -44,10 +44,12 @@ export default ({ data, status, socket }) => {
                 <div className="c-game-row">
                     <div className="c-pokemon">
                         <div className="c-pokemon__image">
-                            <img
-                                alt="Mine Pokemon"
-                                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png"
-                            />
+                                {data?.you?.pokemon && (
+                                <img 
+                                alt="Mine Pokemon" 
+                                src={data.you.pokemon.image}
+                                />
+                                )}
                         </div>
                     </div>
                     <div className="c-pokemon-info">

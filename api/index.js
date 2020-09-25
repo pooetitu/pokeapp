@@ -25,6 +25,7 @@ const io = socketIO(server, {
 io.on('connection', socket => {
     const name = socket.handshake.query.name || 'Someone';
     const pokemonIndex = socket.handshake.query.pokemon || 0;
+    console.log('chosen pokemon' + pokemonIndex);
     console.log(`${name} is connected`);
     socket.emit('connected');
 
