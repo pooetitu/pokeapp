@@ -6,7 +6,7 @@ export const startGame = (players, config) => {
     console.log('player turn is set to ' + config.turn)
     for(const [index, player] of players.entries()){
         const {socket, ...you} = player; 
-        const {socket: _, opponent} = players.find(player => player.socket.id !== socket);
+        const {socket: _, ...opponent} = players.find(player => player.socket.id !== socket.id);
         socket.emit('started',{
             you,
             opponent,
@@ -53,7 +53,7 @@ const updateGame = (moveId, players, config) => {
     config.turn = Number(!config.turn);
     for(const [index, player] of players.entries()){
         const {socket, ...you} = player; 
-        const {socket: _, opponent} = players.find(player => player.socket.id !== socket);
+        const {socket: _, ...opponent} = players.find(player => player.socket.id !== socket);
         player.socket.emit('moved',{
             you,
             opponent,
@@ -68,7 +68,7 @@ const endGame = players => {
     let winnerIndex = players.findIndex(player => player.pokemon.hp > 0);
     for(const [index, player] of players.entries()){
         const {socket, ...you} = player; 
-        const {socket: _, opponent} = players.find(player => player.socket.id !== socket);
+        const {socket: _, ...opponent} = players.find(player => player.socket.id !== socket);
         player.socket.emit('ended', {
             you,
             opponent,
