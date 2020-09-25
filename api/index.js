@@ -30,7 +30,7 @@ io.on('connection', socket => {
     socket.emit('connected');
 
     if (players.length < 2) {
-        players.push({ name, socket, pokemon: pokemons[pokemonIndex] });
+        players.push({ name, socket, pokemon: {...pokemons[pokemonIndex]} });
         
     } else {
         socket.emit('connection_refused');

@@ -24,7 +24,7 @@ export const terminateGame = (socket, players) => {
     }
     for(const player of players){
         player.pokemon = null;
-        socket.emit('terminated');
+        player.socket.emit('terminated');
     }
 };
 

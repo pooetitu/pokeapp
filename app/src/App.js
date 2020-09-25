@@ -17,7 +17,6 @@ export default () => {
             console.log('ret')
             return;
         }
-        console.log('poke: ' + pokemon)
         setSocket(io(`http://localhost:3000?name=${name}&pokemon=${pokemon}`));
     }, [pokemon]);
 
@@ -43,7 +42,7 @@ export default () => {
 
 
         socket.on('terminated', () => {
-            setStatus('terminated')
+            setStatus('terminated');
             console.log('game terminated');
         });
 
@@ -62,7 +61,7 @@ export default () => {
 
     return (
         <div className="c-app">
-            {name && pokemon && <GameView data={data} status={status} socket={socket}/>}
+            {name && pokemon && <GameView data={data} status={status} socket={socket} setPokemon={setPokemon}/>}
             {!name && <LoginView setName={setName} />}
             {/* <WelcomeView /> */}
             {name && !pokemon && <ChooseView setPokemon={setPokemon}/>}
